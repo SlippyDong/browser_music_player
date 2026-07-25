@@ -18,7 +18,7 @@ A small, installable Progressive Web App for playing local music files in the br
 Music Player PWA is a lightweight client-side music player that runs in modern browsers (Chromium-based / Edge / Chrome). It is intended for local playback of audio files and for creating, saving, and restoring playlists using the Web File System Access API plus IndexedDB.
 
 **Screenshot**
-![Screenshot](screenshots/screenshot1.png)
+![Screenshot](screenshots/screenshot.png)
 
 **Features**
 
