@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <title>Music Player</title>
+    <link href="styles.css" rel="stylesheet" />
+    <link href="manifest.webmanifest" rel="manifest" />
+    <meta content="#0c1017" name="theme-color" />
+    <link href="icons/icon-192.png" rel="icon" type="image/png" />
+  </head>
+  <body>
+    <div class="app">
+      <div class="topbar">
+        <div class="brand"><h1>Standalone Music Player</h1></div>
+        <div class="actions">
+          <button class="primary" id="addFiles">Add files</button>
+          <button id="addFolder">Add folder</button>
+
+          <button class="hidden" id="installBtn">Install app</button
+          ><button id="helpBtn">Help</button>
+        </div>
+      </div>
+      <section aria-label="Saved playlists" class="playlistManager">
+        <div class="playlistIdentity">
+          <label for="playlistSelect">Playlist</label>
+          <select id="playlistSelect" title="Choose a saved playlist">
+            <option value="">Choose saved playlist…</option>
+          </select>
+          <span class="playlistState" id="playlistState">Not saved</span>
+        </div>
+        <div class="playlistActions">
+          <button class="small" id="newPlaylist">New</button>
+          <button class="small primary" id="savePlaylist">Save playlist</button>
+          <button class="small" id="savePlaylistAs">Save as</button>
+          <button class="small" id="renamePlaylist">Rename</button>
+          <button class="small danger" id="deletePlaylist">Delete</button>
+        </div>
+      </section>
+      <div aria-live="polite" class="notice" id="notice" role="status"></div>
+      <section class="player">
+        <div class="now">
+          <div>
+            <div class="title" id="nowTitle">Nothing playing</div>
+            <div class="sub" id="nowSub">Add audio files to begin</div>
+          </div>
+        </div>
+        <div class="transport">
+          <div class="transportMain">
+            <button class="icon" id="shuffleBtn" title="Shuffle">🔀</button>
+            <button class="icon" id="prevBtn" title="Previous">⏮</button>
+            <button class="icon primary" id="playBtn" title="Play / Pause">
+              ▶
+            </button>
+            <button class="icon" id="stopBtn" title="Stop">⏹</button>
+            <button class="icon" id="nextBtn" title="Next">⏭</button>
+            <button class="icon" id="repeatBtn" title="Repeat: off">↻</button>
+            <div class="transportExtras">
+              <button class="small" id="muteBtn" title="Mute">🔊</button>
+              <input
+                id="volume"
+                max="1"
+                min="0"
+                step="0.01"
+                title="Volume"
+                type="range"
+                value="0.85"
+              />
+              <select class="speed" id="speed" title="Playback speed">
+                <option>.75×</option>
+                <option selected="">1×</option>
+                <option>1.25×</option>
+                <option>1.5×</option>
+                <option>2×</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="timeline">
+          <span id="currentTime">0:00</span>
+          <div class="seekWrap">
+            <div class="seekHint" id="seekHint"></div>
+            <input
+              id="seek"
+              max="1000"
+              min="0"
+              title="Seek"
+              type="range"
+              value="0"
+            />
+          </div>
+          <span id="duration">0:00</span>
+        </div>
+      </section>
+      <div class="toolbar">
+        <div class="left">
+          <input
+            class="search"
+            id="search"
+            placeholder="Filter playlist…"
+          /><span class="count" id="count">0 tracks</span>
+        </div>
+        <div class="right">
+          <button class="small" id="saveSelected">Save selected</button>
+          <button class="small" id="saveAll">Save all changes</button>
+          <button class="small danger" id="removeSelected">
+            Remove selected
+          </button>
+          <button class="small danger" id="clearAll">Clear</button>
+        </div>
+      </div>
+      <div class="tableWrap">
+        <div class="playlistScroll">
+          <table class="playlist" id="playlistTable">
+            <colgroup>
+              <col style="width: 110px" />
+              <col style="width: 42px" />
+              <col style="width: 48px" />
+              <col style="width: 360px" />
+              <col style="width: 86px" />
+              <col style="width: 88px" />
+              <col style="width: 68px" />
+              <col style="width: 92px" />
+              <col style="width: 280px" />
+              <col style="width: 200px" />
+              <col style="width: 200px" />
+              <col style="width: 72px" />
+              <col style="width: 64px" />
+              <col style="width: 150px" />
+              <col style="width: 260px" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th class="noSort actionsHeader">Actions</th>
+                <th class="noSort" style="width: 34px"></th>
+                <th data-sort="index">#</th>
+                <th data-sort="fileName">File name</th>
+                <th data-sort="duration">Duration</th>
+                <th data-sort="size">Size</th>
+                <th data-sort="type">Type</th>
+                <th data-sort="bitrate">Bitrate</th>
+                <th data-sort="title">Title</th>
+                <th data-sort="artist">Artist</th>
+                <th data-sort="album">Album</th>
+                <th data-sort="year">Year</th>
+                <th data-sort="track">Track</th>
+                <th data-sort="genre">Genre</th>
+                <th data-sort="comment">Comment</th>
+              </tr>
+            </thead>
+            <tbody id="playlistBody">
+              <tr>
+                <td class="empty" colspan="15">No tracks in the playlist.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="footer">
+        Keyboard: <span class="kbd">Space</span> play/pause,
+        <span class="kbd">←</span>/<span class="kbd">→</span> seek,
+        <span class="kbd">↑</span>/<span class="kbd">↓</span> volume. Edits
+        marked in amber are not saved yet.
+      </div>
+    </div>
+    <div class="cellPopover hidden" id="cellPopover" role="tooltip"></div>
+    <audio id="audio" preload="metadata"></audio>
+    <input
+      accept=".mp3,.wav,.wave,.flac,audio/mpeg,audio/wav,audio/flac"
+      class="hidden"
+      id="fallbackFiles"
+      multiple=""
+      type="file"
+    />
+    <input
+      accept=".mp3,.wav,.wave,.flac,audio/mpeg,audio/wav,audio/flac"
+      class="hidden"
+      id="fallbackFolder"
+      multiple=""
+      type="file"
+      webkitdirectory=""
+    />
+
+    <dialog id="helpDialog">
+      <div class="dialogHead">
+        Music Player, saved playlists, installation and file access
+      </div>
+      <div class="dialogBody">
+        <p>
+          <b>Installation:</b> open this bundle from HTTPS or
+          <code>http://localhost</code>, then use <b>Install app</b> in Chrome
+          or Microsoft Edge. The service worker caches the app so it can
+          continue to launch offline after installation.
+        </p>
+        <p>
+          <b>Saved playlists:</b> playlists are stored locally in IndexedDB. A
+          saved playlist contains its name, track order, file or folder handles,
+          filenames and relative paths. Metadata, duration and bitrate are
+          deliberately read again from the audio files whenever the playlist is
+          opened.
+        </p>
+        <p>
+          <b>Permissions:</b> the browser may ask you to restore access when a
+          saved playlist is opened. Folder-based playlists normally require one
+          permission per stored root folder. Individually selected files can
+          require permission per file.
+        </p>
+        <p>
+          <b>Playback:</b> MP3, WAV and FLAC are passed to the browser's native
+          audio engine. Codec support depends on the browser and operating
+          system.
+        </p>
+        <p>
+          <b>Direct saving:</b> files added with the native file/folder pickers,
+          a supported drag-and-drop operation or Windows file handling can be
+          overwritten after permission is granted. Fallback picker entries
+          without a file-system handle can play, but cannot be reopened
+          automatically from a saved playlist.
+        </p>
+        <p>
+          <b>Renaming:</b> in-place rename requires a directory handle. This is
+          available for files imported through <b>Add folder</b> or a dropped
+          folder. Otherwise a changed filename is saved through Save As.
+        </p>
+        <p>
+          <b>File associations:</b> once installed, the PWA registers MP3, WAV,
+          WAVE and FLAC as supported file types. Windows still controls which
+          application is the default for each extension.
+        </p>
+        <p>
+          <b>Metadata:</b> the app writes common title, artist, album,
+          year/date, track, genre and comment tags. Keep backups before bulk
+          edits.
+        </p>
+      </div>
+      <div class="dialogFoot">
+        <button class="primary" id="closeHelp">Close</button>
+      </div>
+    </dialog>
+
+    <script defer src="playlist-db.js"></script>
+    <script defer src="app.js"></script>
+  </body>
+</html>
